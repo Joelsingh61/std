@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import numpy as np  # Added for calculating standard deviation
+import numpy as np  # Added for standard deviation
 
 def analyze_student_grades(df):
     """Analyzes student grades from a DataFrame.
@@ -52,15 +52,20 @@ def main():
     if uploaded_file is not None:
         try:
             df = pd.read_csv(uploaded_file)
+
             # Basic validation (assuming 'Grade' is the column name)
             if 'Grade' not in df.columns:
                 st.error("Error: The uploaded CSV file must contain a column named 'Grade'.")
             else:
-                # Ensure 'Grade' column has numeric values
+                # Ensure 'Grade' column has numeric values (using try-except)
                 try:
                     df['Grade'] = pd.to_numeric(df['Grade'])
                     analyze_student_grades(df.copy())  # Avoid modifying original DataFrame
                 except ValueError:
                     st.error("Error: The 'Grade' column must contain valid numeric values.")
+
         except pd.errors.ParserError:
             st.error("Error: Invalid CSV file format. Please ensure it's a valid CSV file.")
+
+if __name__ == "__main__":
+    main()
